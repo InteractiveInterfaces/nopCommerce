@@ -358,7 +358,7 @@ namespace Nop.Services.Catalog
                 _customerService.GetCustomerRoleIds(customer),
                 _storeContext.CurrentStore);
 
-            var cacheTime = _catalogSettings.CacheProductPrices ? NopCachingDefaults.CacheTime : 0;
+            var cacheTime = _catalogSettings.CacheProductPrices ? cacheKey.CacheTime : 0;
             //we do not cache price for rental products
             //otherwise, it can cause memory leaks (to store all possible date period combinations)
             if (product.IsRental)

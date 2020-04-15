@@ -76,7 +76,7 @@ namespace Nop.Services.Tests.Catalog
                 .Callback(
                     (CustomerCustomerRoleMapping ccrm) => { customerCustomerRoleMapping.Add(ccrm); });
 
-            _customerService = new CustomerService(null, null, null, null, null,
+            _customerService = new CustomerService(new CachingSettings(), null, null, null, null, null,
                 null, _customerCustomerRoleMappingRepository.Object, null, _customerRoleRepository.Object, null, null,
                 new TestCacheManager(), _storeContext.Object, null);
 

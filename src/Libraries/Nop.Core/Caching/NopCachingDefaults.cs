@@ -9,12 +9,7 @@
         /// Gets the default cache time in minutes
         /// </summary>
         public static int CacheTime => 60;
-
-        /// <summary>
-        /// Gets the default short term cache time in minutes
-        /// </summary>
-        public static int ShortTermCacheTime => 10;
-
+        
         /// <summary>
         /// Gets a key for caching
         /// </summary>

@@ -9,13 +9,11 @@ using System.Xml;
 using Newtonsoft.Json;
 using Nop.Core;
 using Nop.Core.Caching;
-using Nop.Core.Configuration;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
-using Nop.Core.Infrastructure;
 using Nop.Services.Caching;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
@@ -33,8 +31,8 @@ namespace Nop.Plugin.Shipping.ShipStation.Services
         #region constants
 
         private const string API_URL = "https://ssapi.shipstation.com/";
-        private readonly CacheKey _carriersCacheKey = new CacheKey("Nop.plugins.shipping.shipstation.carrierscachekey", Singleton<NopConfig>.Instance.ShortTermCachingTime);
-        private readonly CacheKey _serviceCacheKey = new CacheKey("Nop.plugins.shipping.shipstation.servicecachekey.{0}", Singleton<NopConfig>.Instance.ShortTermCachingTime);
+        private readonly CacheKey _carriersCacheKey = new CacheKey("Nop.plugins.shipping.shipstation.carrierscachekey");
+        private readonly CacheKey _serviceCacheKey = new CacheKey("Nop.plugins.shipping.shipstation.servicecachekey.{0}");
 
         private const string CONTENT_TYPE = "application/json";
         private const string DATE_FORMAT = "MM/dd/yyyy HH:mm";
@@ -65,7 +63,8 @@ namespace Nop.Plugin.Shipping.ShipStation.Services
 
         #region Ctor
 
-        public ShipStationService(IAddressService addressService,            
+        public ShipStationService(CachingSettings cachingSettings,
+            IAddressService addressService,
             ICountryService countryService,
             ICustomerService customerService,
             ILogger logger,
@@ -92,6 +91,8 @@ namespace Nop.Plugin.Shipping.ShipStation.Services
             _cacheManager = cacheManager;
             _storeContext = storeContext;
             _shipStationSettings = shipStationSettings;
+
+            _carriersCacheKey.CacheTime = _serviceCacheKey.CacheTime = cachingSettings.ShortTermCacheTime;
         }
 
         #endregion

@@ -1,9 +1,7 @@
 ﻿using System.Linq;
 using Nop.Core.Caching;
-using Nop.Core.Configuration;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Events;
-using Nop.Core.Infrastructure;
 using Nop.Plugin.Tax.FixedOrByCountryStateZip.Domain;
 using Nop.Plugin.Tax.FixedOrByCountryStateZip.Services;
 using Nop.Services.Configuration;
@@ -28,7 +26,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Infrastructure.Cache
         /// Key for caching all tax rates
         /// </summary>
         public static CacheKey ALL_TAX_RATES_MODEL_KEY = new CacheKey("Nop.plugins.tax.fixedorbycountrystateziptaxrate.all", TAXRATE_PATTERN_KEY);
-        public static CacheKey TAXRATE_ALL_KEY = new CacheKey("Nop.plugins.tax.fixedorbycountrystateziptaxrate.taxrate.all", Singleton<NopConfig>.Instance.ShortTermCachingTime, TAXRATE_PATTERN_KEY);
+        public static CacheKey TAXRATE_ALL_KEY = new CacheKey("Nop.plugins.tax.fixedorbycountrystateziptaxrate.taxrate.all", TAXRATE_PATTERN_KEY);
         public const string TAXRATE_PATTERN_KEY = "Nop.plugins.tax.fixedorbycountrystateziptaxrate.";
 
         #endregion
@@ -43,13 +41,16 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Infrastructure.Cache
 
         #region Ctor
 
-        public ModelCacheEventConsumer(ICountryStateZipService taxRateService,
+        public ModelCacheEventConsumer(CachingSettings cachingSettings,
+            ICountryStateZipService taxRateService,
             ISettingService settingService,
             IStaticCacheManager cacheManager)
         {
             _taxRateService = taxRateService;
             _settingService = settingService;
             _cacheManager = cacheManager;
+
+            TAXRATE_ALL_KEY.CacheTime = cachingSettings.ShortTermCacheTime;
         }
 
         #endregion

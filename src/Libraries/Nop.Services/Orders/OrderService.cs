@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Nop.Core;
-using Nop.Core.Configuration;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Payments;
 using Nop.Core.Html;
-using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Catalog;
@@ -26,6 +25,7 @@ namespace Nop.Services.Orders
     {
         #region Fields
 
+        private readonly CachingSettings _cachingSettings;
         private readonly IEventPublisher _eventPublisher;
         private readonly IProductService _productService;
         private readonly IRepository<Address> _addressRepository;
@@ -43,7 +43,8 @@ namespace Nop.Services.Orders
 
         #region Ctor
 
-        public OrderService(IEventPublisher eventPublisher,
+        public OrderService(CachingSettings cachingSettings,
+            IEventPublisher eventPublisher,
             IProductService productService,
             IRepository<Address> addressRepository,
             IRepository<Customer> customerRepository,
@@ -56,6 +57,7 @@ namespace Nop.Services.Orders
             IRepository<RecurringPaymentHistory> recurringPaymentHistoryRepository,
             IShipmentService shipmentService)
         {
+            _cachingSettings = cachingSettings;
             _eventPublisher = eventPublisher;
             _productService = productService;
             _addressRepository = addressRepository;
@@ -86,7 +88,7 @@ namespace Nop.Services.Orders
             if (orderId == 0)
                 return null;
 
-            return _orderRepository.ToCachedGetById(orderId, Singleton<NopConfig>.Instance.ShortTermCachingTime);
+            return _orderRepository.ToCachedGetById(orderId, _cachingSettings.ShortTermCacheTime);
         }
 
         /// <summary>
@@ -466,7 +468,7 @@ namespace Nop.Services.Orders
             if (orderItemId == 0)
                 return null;
 
-            return _orderItemRepository.ToCachedGetById(orderItemId, Singleton<NopConfig>.Instance.ShortTermCachingTime);
+            return _orderItemRepository.ToCachedGetById(orderItemId, _cachingSettings.ShortTermCacheTime);
         }
 
         /// <summary>

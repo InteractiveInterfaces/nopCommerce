@@ -3,7 +3,8 @@ using FluentAssertions;
 ﻿using System.Collections.Generic;
 using Moq;
 using Nop.Core;
-using Nop.Data;
+ using Nop.Core.Caching;
+ using Nop.Data;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
@@ -98,7 +99,8 @@ namespace Nop.Services.Tests.Tax
             var pluginService = new FakePluginService();
             _taxPluginManager = new TaxPluginManager(pluginService, _taxSettings);
 
-            _customerService = new CustomerService(new CustomerSettings(),
+            _customerService = new CustomerService(new CachingSettings(), 
+                new CustomerSettings(),
                 _eventPublisher.Object,
                 _genericAttributeService.Object,
                 null,

@@ -36,6 +36,7 @@ namespace Nop.Services.Orders
     {
         #region Fields
 
+        private readonly CachingSettings _cachingSettings;
         private readonly CatalogSettings _catalogSettings;
         private readonly IAclService _aclService;
         private readonly IActionContextAccessor _actionContextAccessor;
@@ -69,7 +70,8 @@ namespace Nop.Services.Orders
 
         #region Ctor
 
-        public ShoppingCartService(CatalogSettings catalogSettings,
+        public ShoppingCartService(CachingSettings cachingSettings,
+            CatalogSettings catalogSettings,
             IAclService aclService,
             IActionContextAccessor actionContextAccessor,
             ICheckoutAttributeParser checkoutAttributeParser,
@@ -98,6 +100,7 @@ namespace Nop.Services.Orders
             OrderSettings orderSettings,
             ShoppingCartSettings shoppingCartSettings)
         {
+            _cachingSettings = cachingSettings;
             _catalogSettings = catalogSettings;
             _aclService = aclService;
             _actionContextAccessor = actionContextAccessor;
@@ -661,6 +664,7 @@ namespace Nop.Services.Orders
                 items = items.Where(item => createdToUtc.Value >= item.CreatedOnUtc);
 
             var key = NopOrderDefaults.ShoppingCartCacheKey.FillCacheKey(customer, shoppingCartType, storeId, productId, createdFromUtc, createdToUtc);
+            key.CacheTime = _cachingSettings.ShortTermCacheTime;
 
             return _cacheManager.Get(key, () => items.ToList());
         }

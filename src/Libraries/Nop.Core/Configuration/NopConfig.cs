@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Nop.Core.Caching;
 
 namespace Nop.Core.Configuration
 {
@@ -8,8 +7,6 @@ namespace Nop.Core.Configuration
     /// </summary>
     public partial class NopConfig
     {
-        private int? _shortTermCachingTime;
-
         /// <summary>
         /// Gets or sets a value indicating whether to display the full error in production environment.
         /// It's ignored (always enabled) in development environment
@@ -49,15 +46,6 @@ namespace Nop.Core.Configuration
         /// Gets or sets the Azure key vault ID used to encrypt the Data Protection Keys. (this is optional)
         /// </summary>
         public string AzureKeyVaultIdForDataProtectionKeys { get; set; }
-
-        /// <summary>
-        /// Gets or sets the time in minutes for short term caching. Set NULL if should use the default time (10 minutes)
-        /// </summary>
-        public int? ShortTermCachingTime
-        {
-            get => _shortTermCachingTime ?? NopCachingDefaults.ShortTermCacheTime;
-            set => _shortTermCachingTime = value;
-        }
 
         /// <summary>
         /// Gets or sets a value indicating whether we should use Redis server

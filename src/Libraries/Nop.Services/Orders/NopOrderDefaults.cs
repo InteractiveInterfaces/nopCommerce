@@ -1,6 +1,4 @@
 ﻿using Nop.Core.Caching;
-using Nop.Core.Configuration;
-using Nop.Core.Infrastructure;
 
 namespace Nop.Services.Orders
 {
@@ -50,7 +48,7 @@ namespace Nop.Services.Orders
         /// {4} : created from date
         /// {5} : created to date
         /// </remarks>
-        public static CacheKey ShoppingCartCacheKey => new CacheKey("Nop.shoppingcart-{0}-{1}-{2}-{3}-{4}-{5}", Singleton<NopConfig>.Instance.ShortTermCachingTime, ShoppingCartPrefixCacheKey);
+        public static CacheKey ShoppingCartCacheKey => new CacheKey("Nop.shoppingcart-{0}-{1}-{2}-{3}-{4}-{5}", ShoppingCartPrefixCacheKey);
 
         /// <summary>
         /// Gets a key pattern to clear cache
